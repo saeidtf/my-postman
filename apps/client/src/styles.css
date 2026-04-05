@@ -244,6 +244,7 @@ textarea {
 
 .request-card small,
 .history-card small,
+.history-box small,
 .environment-row small,
 .muted,
 .eyebrow {
@@ -402,4 +403,10 @@ pre {
   display: flex;
   flex-direction: column-reverse;
   gap: 0.75rem;
+}
+
+.history-box-info {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
 }
