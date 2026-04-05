@@ -4,6 +4,8 @@ import { EnvironmentPanel } from "./components/EnvironmentPanel";
 import { PairTable } from "./components/PairTable";
 import { ResponsePanel } from "./components/ResponsePanel";
 import { Sidebar } from "./components/Sidebar";
+import { SelectField } from "./components/ui/SelectField";
+import { TextInput } from "./components/ui/TextInput";
 import { api } from "./lib/api";
 import { createEmptyRequest } from "./lib/helpers";
 import type {
@@ -111,7 +113,7 @@ function App() {
             {errorMessage ? <p className="error-text">{errorMessage}</p> : null}
           </div>
           <div className="action-row">
-          <button
+            <button
               className="primary-button"
               disabled={isRunning}
               onClick={runRequest}
@@ -125,7 +127,7 @@ function App() {
               type="button"
             >
               Save Request
-            </button>            
+            </button>
             {currentRequest.id ? (
               <button
                 className="ghost-button danger"
@@ -154,67 +156,73 @@ function App() {
 
         <section className="panel request-editor">
           <div className="editor-top-grid">
-            <input
-              onChange={(event) =>
-                setCurrentRequest((item) => ({
-                  ...item,
-                  name: event.target.value,
-                }))
-              }
-              placeholder="Request name"
+            <TextInput
+              label="Request name"
               value={currentRequest.name}
-            />
-            <input
-              onChange={(event) =>
+              placeholder="Request name"
+              onChange={(value) =>
                 setCurrentRequest((item) => ({
                   ...item,
-                  collection: event.target.value,
+                  name: value,
                 }))
               }
-              placeholder="Collection"
+            />
+
+            <TextInput
+              label="Collection"
               value={currentRequest.collection}
-            />
-            <input
-              onChange={(event) =>
+              placeholder="Collection"
+              onChange={(value) =>
                 setCurrentRequest((item) => ({
                   ...item,
-                  timeoutMs: Number(event.target.value) || 30000,
+                  collection: value,
                 }))
               }
-              placeholder="Timeout"
-              type="number"
-              value={currentRequest.timeoutMs}
+            />
+
+            <TextInput
+              label="Timeout (ms)"
+              value={String(currentRequest.timeoutMs)}
+              placeholder="30000"
+              onChange={(value) =>
+                setCurrentRequest((item) => ({
+                  ...item,
+                  timeoutMs: Number(value) || 30000,
+                }))
+              }
             />
           </div>
 
           <div className="request-bar">
-            <select
-              onChange={(event) =>
-                setCurrentRequest((item) => ({
-                  ...item,
-                  method: event.target.value as ApiRequestDefinition["method"],
-                }))
-              }
+            <SelectField
+              label="Method"
               value={currentRequest.method}
-            >
-              {["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"].map(
-                (method) => (
-                  <option key={method} value={method}>
-                    {method}
-                  </option>
-                ),
-              )}
-            </select>
-            <input
-              className="url-input"
-              onChange={(event) =>
+              onChange={(value) =>
                 setCurrentRequest((item) => ({
                   ...item,
-                  url: event.target.value,
+                  method: value as ApiRequestDefinition["method"],
                 }))
               }
-              placeholder="https://api.example.com/resource"
+              options={[
+                { label: "GET", value: "GET" },
+                { label: "POST", value: "POST" },
+                { label: "PUT", value: "PUT" },
+                { label: "PATCH", value: "PATCH" },
+                { label: "DELETE", value: "DELETE" },
+                { label: "HEAD", value: "HEAD" },
+                { label: "OPTIONS", value: "OPTIONS" },
+              ]}
+            />
+            <TextInput
+              label="URL"
               value={currentRequest.url}
+              placeholder="https://api.example.com/resource"
+              onChange={(value) =>
+                setCurrentRequest((item) => ({
+                  ...item,
+                  url: value,
+                }))
+              }
             />
           </div>
 
@@ -241,116 +249,100 @@ function App() {
               <h3>Authorization</h3>
             </div>
             <div className="auth-grid">
-              <select
-                onChange={(event) =>
+              <SelectField
+                label="Auth Type"
+                value={currentRequest.authType}
+                options={authModes.map((mode) => ({
+                  label: mode,
+                  value: mode,
+                }))}
+                onChange={(value) =>
                   setCurrentRequest((item) => ({
                     ...item,
-                    authType: event.target.value as AuthType,
+                    authType: value as AuthType,
                     authConfig: {},
                   }))
                 }
-                value={currentRequest.authType}
-              >
-                {authModes.map((mode) => (
-                  <option key={mode} value={mode}>
-                    {mode}
-                  </option>
-                ))}
-              </select>
-
-              {currentRequest.authType === "bearer" ? (
-                <input
-                  onChange={(event) =>
+              />
+              {currentRequest.authType === "bearer" && (
+                <TextInput
+                  label="Bearer Token"
+                  value={currentRequest.authConfig.token ?? ""}
+                  onChange={(value) =>
                     setCurrentRequest((item) => ({
                       ...item,
                       authConfig: {
                         ...item.authConfig,
-                        token: event.target.value,
+                        token: value,
                       },
                     }))
                   }
-                  placeholder="Bearer token"
-                  value={currentRequest.authConfig.token ?? ""}
                 />
-              ) : null}
+              )}
 
-              {currentRequest.authType === "basic" ? (
+              {currentRequest.authType === "basic" && (
                 <>
-                  <input
-                    onChange={(event) =>
-                      setCurrentRequest((item) => ({
-                        ...item,
-                        authConfig: {
-                          ...item.authConfig,
-                          username: event.target.value,
-                        },
-                      }))
-                    }
-                    placeholder="Username"
+                  <TextInput
+                    label="Username"
                     value={currentRequest.authConfig.username ?? ""}
-                  />
-                  <input
-                    onChange={(event) =>
+                    onChange={(value) =>
                       setCurrentRequest((item) => ({
                         ...item,
                         authConfig: {
                           ...item.authConfig,
-                          password: event.target.value,
+                          username: value,
                         },
                       }))
                     }
-                    placeholder="Password"
-                    type="password"
-                    value={currentRequest.authConfig.password ?? ""}
                   />
-                </>
-              ) : null}
 
-              {currentRequest.authType === "api-key" ? (
-                <>
-                  <input
-                    onChange={(event) =>
+                  <TextInput
+                    label="Password"
+                    value={currentRequest.authConfig.password ?? ""}
+                    onChange={(value) =>
                       setCurrentRequest((item) => ({
                         ...item,
                         authConfig: {
                           ...item.authConfig,
-                          key: event.target.value,
+                          password: value,
                         },
                       }))
                     }
-                    placeholder="Key"
-                    value={currentRequest.authConfig.key ?? ""}
                   />
-                  <input
-                    onChange={(event) =>
-                      setCurrentRequest((item) => ({
-                        ...item,
-                        authConfig: {
-                          ...item.authConfig,
-                          value: event.target.value,
-                        },
-                      }))
-                    }
-                    placeholder="Value"
-                    value={currentRequest.authConfig.value ?? ""}
-                  />
-                  <select
-                    onChange={(event) =>
-                      setCurrentRequest((item) => ({
-                        ...item,
-                        authConfig: {
-                          ...item.authConfig,
-                          location: event.target.value,
-                        },
-                      }))
-                    }
-                    value={currentRequest.authConfig.location ?? "header"}
-                  >
-                    <option value="header">Header</option>
-                    <option value="query">Query</option>
-                  </select>
                 </>
-              ) : null}
+              )}
+
+              {currentRequest.authType === "api-key" && (
+                <>
+                  <TextInput
+                    label="Key"
+                    value={currentRequest.authConfig.key ?? ""}
+                    onChange={(value) =>
+                      setCurrentRequest((item) => ({
+                        ...item,
+                        authConfig: {
+                          ...item.authConfig,
+                          key: value,
+                        },
+                      }))
+                    }
+                  />
+
+                  <TextInput
+                    label="Value"
+                    value={currentRequest.authConfig.value ?? ""}
+                    onChange={(value) =>
+                      setCurrentRequest((item) => ({
+                        ...item,
+                        authConfig: {
+                          ...item.authConfig,
+                          value: value,
+                        },
+                      }))
+                    }
+                  />
+                </>
+              )}
             </div>
           </section>
 

@@ -1,0 +1,97 @@
+.textInputWrapper {
+  width: 100%;
+}
+
+/* 👇 این خودش باید "input field واقعی" به نظر برسد */
+.textInputContainer {
+  position: relative;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+
+  background: rgba(8, 19, 33, 0.82);
+
+  /* مهم: padding مثل input واقعی */
+  padding: 1.1rem 0.9rem;
+
+  transition: 180ms ease;
+  backdrop-filter: blur(12px);
+}
+
+/* hover فقط subtle */
+.textInputContainer:hover {
+  border-color: rgba(85, 214, 190, 0.35);
+}
+
+/* focus */
+.textInputContainer.focused {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(85, 214, 190, 0.12);
+}
+
+/* error */
+.textInputContainer.error {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(255, 127, 127, 0.12);
+}
+
+/* input */
+.textInputField {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 0.95rem;
+  padding: 0; /* خیلی مهم */
+}
+
+/* placeholder */
+.textInputField::placeholder {
+  color: var(--muted);
+}
+
+/* LABEL */
+.textInputLabel {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 0.95rem;
+  pointer-events: none;
+  transition: 160ms ease;
+
+  padding: 0 0.4rem;
+  border-radius: 6px;
+
+  /* مهم: یکپارچه شدن با background */
+  background: transparent;
+}
+
+/* FLOAT */
+.textInputLabel.active {
+  top: 0;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  background: rgba(8, 19, 33, 0.95);
+}
+
+/* focus color */
+.textInputContainer.focused .textInputLabel.active {
+  color: var(--accent);
+}
+
+/* error label */
+.textInputContainer.error .textInputLabel.active {
+  color: var(--danger);
+  background: rgba(8, 19, 33, 0.95);
+}
+
+/* error text */
+.textInputError {
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
+  color: #ffb0b0;
+  padding-left: 0.25rem;
+}

@@ -1,4 +1,5 @@
 import type { KeyValuePair } from "../types";
+import { TextInput } from "./ui/TextInput";
 
 type PairTableProps = {
   title: string;
@@ -7,12 +8,21 @@ type PairTableProps = {
 };
 
 export function PairTable({ title, rows, onChange }: PairTableProps) {
-  const updateRow = (id: string, field: keyof KeyValuePair, value: string | boolean) => {
-    onChange(rows.map((row) => (row.id === id ? { ...row, [field]: value } : row)));
+  const updateRow = (
+    id: string,
+    field: keyof KeyValuePair,
+    value: string | boolean,
+  ) => {
+    onChange(
+      rows.map((row) => (row.id === id ? { ...row, [field]: value } : row)),
+    );
   };
 
   const addRow = () => {
-    onChange([...rows, { id: crypto.randomUUID(), key: "", value: "", enabled: true }]);
+    onChange([
+      ...rows,
+      { id: crypto.randomUUID(), key: "", value: "", enabled: true },
+    ]);
   };
 
   const removeRow = (id: string) => {
@@ -33,21 +43,28 @@ export function PairTable({ title, rows, onChange }: PairTableProps) {
             <label className="toggle">
               <input
                 checked={row.enabled}
-                onChange={(event) => updateRow(row.id, "enabled", event.target.checked)}
+                onChange={(event) =>
+                  updateRow(row.id, "enabled", event.target.checked)
+                }
                 type="checkbox"
               />
             </label>
-            <input
-              onChange={(event) => updateRow(row.id, "key", event.target.value)}
-              placeholder="Key"
+            <TextInput
+              label="Key"
               value={row.key}
+              onChange={(value) => updateRow(row.id, "key", value)}
             />
-            <input
-              onChange={(event) => updateRow(row.id, "value", event.target.value)}
-              placeholder="Value"
+
+            <TextInput
+              label="Value"
               value={row.value}
+              onChange={(value) => updateRow(row.id, "value", value)}
             />
-            <button className="ghost-button danger" onClick={() => removeRow(row.id)} type="button">
+            <button
+              className="ghost-button danger"
+              onClick={() => removeRow(row.id)}
+              type="button"
+            >
               Remove
             </button>
           </div>

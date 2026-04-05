@@ -1,0 +1,100 @@
+.selectWrapper {
+  width: 100%;
+}
+
+/* MAIN CONTAINER */
+.selectContainer {
+  position: relative;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(8, 19, 33, 0.82);
+  backdrop-filter: blur(12px);
+
+  padding: 1.1rem 0.9rem;
+  cursor: pointer;
+  transition: 180ms ease;
+}
+
+/* hover */
+.selectContainer:hover {
+  border-color: rgba(85, 214, 190, 0.35);
+}
+
+/* focus */
+.selectContainer.focused {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(85, 214, 190, 0.12);
+}
+
+/* LABEL */
+.selectLabel {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.95rem;
+  color: var(--muted);
+  padding: 0 0.4rem;
+  transition: 160ms ease;
+  pointer-events: none;
+  background: transparent;
+}
+
+/* floating label */
+.selectLabel.active {
+  top: 0;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  background: rgba(8, 19, 33, 0.95);
+  border-radius: 6px;
+}
+
+/* VALUE */
+.selectValue {
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+/* ARROW */
+.selectArrow {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+/* DROPDOWN */
+.selectDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+
+  background: rgba(10, 27, 46, 0.95);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+
+  z-index: 100;
+  overflow: hidden;
+}
+
+/* OPTION */
+.selectOption {
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  color: var(--text);
+  transition: 120ms ease;
+}
+
+.selectOption:hover {
+  background: rgba(85, 214, 190, 0.12);
+}
+
+.selectOption.selected {
+  background: rgba(85, 214, 190, 0.18);
+  color: #88ffe1;
+}

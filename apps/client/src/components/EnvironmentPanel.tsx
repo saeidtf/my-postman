@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import type { EnvironmentVariable } from "../types";
+import { TextInput } from "./ui/TextInput";
 
 type EnvironmentPanelProps = {
   items: EnvironmentVariable[];
@@ -24,19 +25,20 @@ export function EnvironmentPanel({
         <h3>Environment Variables</h3>
       </div>
       <div className="environment-form">
-        <input
-          onChange={(event) =>
-            setDraft((current) => ({ ...current, key: event.target.value }))
-          }
-          placeholder="Key"
+        <TextInput
+          label="Key"
           value={draft.key}
-        />
-        <input
-          onChange={(event) =>
-            setDraft((current) => ({ ...current, value: event.target.value }))
+          onChange={(value) =>
+            setDraft((current) => ({ ...current, key: value }))
           }
-          placeholder="Value"
+        />
+
+        <TextInput
+          label="Value"
           value={draft.value}
+          onChange={(value) =>
+            setDraft((current) => ({ ...current, value: value }))
+          }
         />
         <button
           className="primary-button"
